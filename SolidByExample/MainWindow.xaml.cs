@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RestSharp;
+using SolidByExample.Logging;
 
 namespace SolidByExample
 {
@@ -21,10 +23,14 @@ namespace SolidByExample
 	public partial class MainWindow : Window
 	{
 		private IRestService _restService;
-        public MainWindow()
+		private const string _ApiUrl = "http://jsonplaceholder.typicode.com";
+		public MainWindow()
 		{
 			InitializeComponent();
-			_restService = new RestService();
+			// The application now controls the log name and API URL. This would
+			// enable consumers of our RestService to change between testing and
+			// production endpoints, and control our log name!
+			_restService = new RestService(new RestClient(_ApiUrl), new NLogLogHelper("logName"));
         }
 
 		private void PostButton_Click(object sender, RoutedEventArgs e)

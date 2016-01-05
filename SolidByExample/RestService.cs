@@ -16,19 +16,18 @@ namespace SolidByExample
 	{
 		private Dictionary<int, RestPost> _PostCache = new Dictionary<int, RestPost>();
 		private Dictionary<int, RestUser> _UserCache = new Dictionary<int, RestUser>();
-		private const string _ApiUrl = "http://jsonplaceholder.typicode.com";
 		private const string _PostRoute = "posts";
 		private const string _UserRoute = "users";
 
 		private IRestClient _restClient;
 		private ILogHelper _logHelper;
 
-		public RestService()
+		public RestService(IRestClient client, ILogHelper logHelper)
 		{
-			// Opportunity for dependency inversion: consumer of our Service should
-			// be able to specify which instance of the Rest Client and Log we use.
-			_restClient = new RestClient(_ApiUrl);
-			var logHelper = new NLogLogHelper("logName");
+			// By applying dependency inversion, we allow our consumer to determine
+			// which Rest client, URL, Log Helper, and log name we use. This increases
+			// reusability of our RestService class by making it more flexible.
+			_restClient = client;
 			_logHelper = logHelper;
 		}
 
